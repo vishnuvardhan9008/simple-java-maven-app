@@ -26,5 +26,21 @@ pipeline {
                 sh './jenkins/scripts/deliver.sh'
             }
         }
+        stage('Upload War To Nexus ') {
+            steps {
+                nexusArtifactUploader artifacts: [
+                    [artifactId: 'my-app', 
+                     classifier: '', 
+                     file: 'target/my-app-1.0.0.war', type: 'war'
+                    ]
+                ],
+                    credentialsId: 'nexus3',
+                    groupId: 'com.mycompany.app',
+                    nexusUrl: '172.31.28.91',
+                    nexusVersion: 'nexus2', 
+                    protocol: 'http', 
+                    repository: 'http://18.217.118.60:8081/repository/sampleapp-release/',
+                    version: '1.0.0'
+            }
     }
 }
